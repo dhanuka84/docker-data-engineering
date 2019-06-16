@@ -1,0 +1,32 @@
+filebeat.inputs:
+
+filebeat.inputs:
+
+- type: log
+  enabled :  true
+  paths:
+    - /var/log/apt/*.log
+  json.keys_under_root: true
+  fields_under_root: true
+  fields:
+    last_name: ranasinghe
+
+- type: tcp
+  enabled : true
+  max_message_size: 10MiB
+  host: "0.0.0.0:7777"
+
+
+output.kafka:
+  enabled : true
+  # initial brokers for reading cluster metadata
+  hosts: ["192.168.0.114:9092", "192.168.0.114:9093", "192.168.0.114:9094"]
+
+  # message topic selection + partitioning
+  topic: 'mytopic'
+  partition.round_robin:
+    reachable_only: false
+
+  required_acks: 1
+  compression: gzip
+  max_message_bytes: 1000000
